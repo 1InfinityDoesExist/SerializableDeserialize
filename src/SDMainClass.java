@@ -1,5 +1,7 @@
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -27,8 +29,32 @@ public class SDMainClass {
 			e.printStackTrace();
 		}
 
+		System.out.println("Second Way");
+		SDInJava javaObject = new SDInJava();
+		javaObject.serializableAndDeserializable(demoObject);
 	}
+}
 
+class SDInJava {
+	public void serializableAndDeserializable(DemoObject demo) {
+
+		String fileName = "fileName.txt";
+
+		try {
+			FileOutputStream fos = new FileOutputStream(fileName);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(demo);
+			oos.flush();
+			oos.close();
+			fos.close();
+			FileInputStream fis = new FileInputStream(fileName);
+			Object obj = new ObjectInputStream(fis).readObject();
+			DemoObject demoValue = (DemoObject) obj;
+			System.out.println(demoValue.getAge());
+		} catch (ClassNotFoundException | IOException ex) {
+
+		}
+	}
 }
 
 class DemoObject implements Serializable {
